@@ -328,8 +328,8 @@ public class Parser implements Closeable {
                     new ArchiveAdapter.EntryTask() {
                         @Override
                         public void on(ArchiveAdapter.Entry entry, InputStream is) throws IOException {
-                            if (logger.isLoggable(Level.FINER)) {
-                                logger.log(Level.FINER, "Parsing class " + entry.name);
+                            if (adapter.getURI().getPath().toString().contains("poi-ooxml-full")) {
+                                logger.log(Level.FINE, () -> "Parsing class " + entry.name);
                             }
                             try {
                                 ClassReader cr = new ClassReader(is);
@@ -338,6 +338,9 @@ public class Parser implements Closeable {
                                 logger.log(Level.SEVERE, "Exception while visiting " + entry.name
                                         + " of size " + entry.size, e);
                             }
+                            if (adapter.getURI().getPath().toString().contains("poi-ooxml-full")) {
+                                logger.log(Level.FINE, () -> "Parsed class " + entry.name);
+                            }
                         }
                     },
                     logger
@@ -345,17 +348,17 @@ public class Parser implements Closeable {
             saveResult(uri, context.getTypes());
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE,"Finished parsing " + adapter.getURI().getPath() + " at " + System.currentTimeMillis() + " in "
+            logger.log(Level.FINE, () -> "Finished parsing " + adapter.getURI().getPath() + " at " + System.currentTimeMillis() + " in "
                 + (System.currentTimeMillis() - startTime) + " ms");
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "before running doneHook" + adapter.getURI().getPath());
+            logger.log(Level.FINE, () -> "before running doneHook" + adapter.getURI().getPath());
         }
         if (doneHook != null) {
             doneHook.run();
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "after running doneHook " + adapter.getURI().getPath());
+            logger.log(Level.FINE, () -> "after running doneHook " + adapter.getURI().getPath());
         }
     }
 
