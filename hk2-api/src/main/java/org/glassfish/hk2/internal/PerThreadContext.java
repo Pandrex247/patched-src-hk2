@@ -46,7 +46,7 @@ public class PerThreadContext implements Context<PerThread> {
             (PrivilegedAction<Boolean>) () -> Boolean.getBoolean("org.hk2.debug.perthreadcontext.log"));
     
     private final Hk2ThreadLocal<PerThreadContextWrapper> threadMap =
-            new Hk2ThreadLocal<>() {
+            new Hk2ThreadLocal<PerThreadContextWrapper>() {
 
                 @Override
                 public PerThreadContextWrapper initialValue() {
